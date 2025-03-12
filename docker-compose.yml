@@ -1,8 +1,6 @@
 services:
   graphdb:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: leogaillard/graphdb:latest
     ports:
       - "7201:7200"
     volumes:
