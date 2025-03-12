@@ -1,0 +1,12 @@
+services:
+  graphdb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7201:7200"
+    volumes:
+      - extern_data:/extern_data
+
+volumes:
+  extern_data:
