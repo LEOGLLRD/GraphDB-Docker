@@ -1,10 +1,13 @@
 services:
   graphdb:
-    image: leogaillard/graphdb:latest
+    build:
+      dockerfile: Dockerfile
     ports:
-      - "7201:7200"
+      - "0:7200"
     volumes:
-      - extern_data:/extern_data
+      - shared-volume:/shared-volume
 
 volumes:
-  extern_data:
+  shared-volume:
+    name: shared-volume
+    external: true

@@ -4,7 +4,7 @@ import json
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/extern_data/data/scripts/on_first_run/python/config.ini')
+config.read('/shared-volume/graphdb/scripts/on_first_run/python/config.ini')
 error = False
 url = 'http://localhost:7200/rest/security'
 
