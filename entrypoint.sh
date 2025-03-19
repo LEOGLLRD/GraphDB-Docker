@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # First installing the dependencies with the requirements.txt file
 echo "Installing the dependencies with the requirements file ..."
@@ -14,7 +14,7 @@ if [[ -d "/shared-volume/python/scripts/on_first_run"  ||  -d "/shared-volume/py
     echo "It's the first run !"
       # Checking if there are files in the on_first_run directory
     echo "Checking if on_first_run directory contains scripts ..."
-    nb_files=$(find "/shared-volume/python/scripts/on_first_run" -maxdepth 1 -type f -name "*.py" -printf x | wc -c)
+    nb_files=$(find "/shared-volume/python/scripts/on_first_run" -maxdepth 1 -type f -name "*.py" | wc -l)
     echo "$nb_files" " files to execute !"
     # If there are scripts, we execute them
     if [ ! "$nb_files" = 0 ]; then
@@ -29,7 +29,7 @@ if [[ -d "/shared-volume/python/scripts/on_first_run"  ||  -d "/shared-volume/py
   # Now checking if there are scripts to execute on each launch
   # First checking if there are files in the on_each_run directory
   echo "Checking on_each_run directory"
-    nb_files=$(find "/shared-volume/python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" -printf x | wc -c)
+    nb_files=$(find "/shared-volume/python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | wc -l)
   echo $nb_files " files to execute !"
   # If there are scripts, we execute them
   if [ ! "$nb_files" = 0 ]; then
