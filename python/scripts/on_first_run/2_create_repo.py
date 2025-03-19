@@ -4,9 +4,9 @@ import configparser
 import io
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/graphdb/scripts/on_first_run/python/config.ini')
+config.read('/shared-volume/python/scripts/on_first_run/config.ini')
 
-url = "http://localhost:7200/rest/repositories"
+url = "http://graphdb:7200/rest/repositories"
 error = False
 number_of_users = int(config.get("USERS", "number"))
 print("Creating the repositories ...")

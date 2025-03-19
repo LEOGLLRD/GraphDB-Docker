@@ -4,9 +4,9 @@ import json
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/graphdb/scripts/on_first_run/python/config.ini')
+config.read('/shared-volume/python/scripts/on_first_run/config.ini')
 error = False
-url = 'http://localhost:7200/rest/security'
+url = 'http://graphdb:7200/rest/security'
 
 username = str(config.get("USERS", "admin_username"))
 password = str(config.get("USERS", "admin_password"))

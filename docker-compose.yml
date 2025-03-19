@@ -1,13 +1,27 @@
 services:
   graphdb:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-graphdb
     ports:
       - "0:7200"
     volumes:
       - shared-volume:/shared-volume
+    container_name: "graphdb"
+    networks:
+      - graphdbnetwork
+  python:
+    build:
+      dockerfile: Dockerfile-python
+    volumes:
+      - shared-volume:/shared-volume
+    container_name: "python"
+    networks:
+      - graphdbnetwork
 
 volumes:
   shared-volume:
     name: shared-volume
     external: true
+
+networks:
+  graphdbnetwork:

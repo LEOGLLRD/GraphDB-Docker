@@ -1,0 +1,11 @@
+FROM python:3
+
+RUN mkdir -p /exec && \
+    mkdir -p /shared-volume/python && \
+    mkdir -p /config && \
+    python -m venv /config/python_env
+
+COPY entrypoint.sh evo.sh /exec/
+
+ENTRYPOINT ["/exec/entrypoint.sh"]
+
