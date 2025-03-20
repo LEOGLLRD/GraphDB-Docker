@@ -4,15 +4,15 @@ import configparser
 import io
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/scripts/on_first_run/config.ini')
+config.read('/shared-volume/python/config.ini')
 
 url = "http://graphdb:7200/rest/repositories"
 error = False
-number_of_users = int(config.get("USERS", "number"))
+number_of_users = int(config.get("USERS", "number_of_users"))
 print("Creating the repositories ...")
 
 for i in range(1, number_of_users + 1):
-    username = config.get("USERS", "admin_username")
+    username = "admin"
     password = config.get("USERS", "admin_password")
 
     ttl_data = f"""

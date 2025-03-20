@@ -5,7 +5,18 @@ RUN mkdir -p /exec && \
     mkdir -p /config && \
     python -m venv /config/python_env
 
+RUN adduser -D python && \
+    echo "python:python" | chpasswd
+
+# Setting the permissions of python user
+RUN chown -R python /config/python_env && \
+    mkdir -p "/shared-volume/python" && \
+    chmod 551 /shared-volume/python && \
+    chown -R python /exec
+
+
 COPY entrypoint.sh evo.sh /exec/
+USER python
 
 ENTRYPOINT ["/exec/entrypoint.sh"]
 

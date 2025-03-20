@@ -4,9 +4,9 @@ import json
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/scripts/on_first_run/config.ini')
+config.read('/shared-volume/python/config.ini')
 error = False
-number_of_users = int(config.get("USERS", "number"))
+number_of_users = int(config.get("USERS", "number_of_users"))
 
 print("Creating the users ...")
 
@@ -16,7 +16,7 @@ for i in range(1, number_of_users + 1):
 
     url = 'http://graphdb:7200/rest/security/users/' + new_user
 
-    username = str(config.get("USERS", "admin_username"))
+    username = "admin"
     password = str(config.get("USERS", "admin_password"))
 
     user_data = {

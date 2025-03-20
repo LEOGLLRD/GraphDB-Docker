@@ -3,12 +3,12 @@ import json
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/scripts/on_first_run/config.ini')
+config.read('/shared-volume/python/config.ini')
 
-numbers_of_students = int(config.get("USERS", "number"))
+numbers_of_students = int(config.get("USERS", "number_of_users"))
 
 GRAPHDB_URL = "http://graphdb:7200"
-admin = str(config.get("USERS", "admin_username"))
+admin = "admin"
 admin_password = str(config.get("USERS", "admin_password"))
 print("Setting up users access ...")
 error = False
