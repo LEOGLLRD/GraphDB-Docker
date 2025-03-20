@@ -14,7 +14,7 @@ if [[ -d "/shared-volume/graphdb/scripts/on_first_run"  ||  -d "/shared-volume/g
     echo "It's the first run !"
       # Checking if there are files in the on_first_run directory
     echo "Checking if on_first_run directory contains scripts ..."
-    nb_files=$(find "/shared-volume/graphdb/scripts/on_first_run" -maxdepth 1 -type f -name "*.sh" -printf x | wc -c)
+    nb_files=$(find "/shared-volume/graphdb/scripts/on_first_run" -maxdepth 1 -type f -name "*.sh" | wc -l)
     echo "$nb_files" " files to execute !"
     # If there are scripts, we execute them
     if [ ! "$nb_files" = 0 ]; then
@@ -29,7 +29,7 @@ if [[ -d "/shared-volume/graphdb/scripts/on_first_run"  ||  -d "/shared-volume/g
   # Now checking if there are scripts to execute on each launch
   # First checking if there are files in the on_each_run directory
   echo "Checking on_each_run directory"
-    nb_files=$(find "/shared-volume/graphdb/scripts/on_each_run" -maxdepth 1 -type f -name "*.sh" -printf x | wc -c)
+    nb_files=$(find "/shared-volume/graphdb/scripts/on_each_run" -maxdepth 1 -type f -name "*.sh" | wc -l)
   echo $nb_files " files to execute !"
   # If there are scripts, we execute them
   if [ ! "$nb_files" = 0 ]; then
