@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/bin/sh
 count=0

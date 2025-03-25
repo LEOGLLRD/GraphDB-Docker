@@ -10,7 +10,7 @@ services:
     networks:
       - graphdbnetwork
     healthcheck:
-      test: [ "CMD-SHELL", "grep 'Started GraphDB' /opt/graphdb/home/logs/main.log" ]
+      test: [ "CMD-SHELL", "grep 'Started GraphDB' /shared-volume/graphdb/logs/main.logs" ]
       interval: 10s
       timeout: 10s
       retries: 3

@@ -22,11 +22,19 @@ RUN mv graphdb-${version} graphdb && \
     mkdir "/opt/graphdb" && \
     chown -R graphdb /opt/graphdb
 
+# Creating the folders for the data, logs and backup folders of GraphDB
+RUN mkdir -p "/shared-volume/graphdb/data" && \
+    mkdir -p "/shared-volume/graphdb/logs" && \
+    mkdir -p "/shared-volume/graphdb/backups" && \
+    chown -R graphdb /shared-volume/graphdb && \
+    chmod -R 777 /shared-volume/graphdb
+
+
 USER graphdb
 
 ENTRYPOINT ["/graphdb/bin/graphdb"]
 
-CMD ["-Dgraphdb.home=/opt/graphdb/home", "-Dgraphdb.distribution=docker"]
+CMD ["-Dgraphdb.home=/opt/graphdb/home", "-Dgraphdb.distribution=docker", "-Dgraphdb.home.data=/shared-volume/graphdb/data", "-Dgraphdb.home.logs=/shared-volume/graphdb/logs"]
 
 EXPOSE 7200
 EXPOSE 7300

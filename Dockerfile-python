@@ -19,4 +19,3 @@ COPY entrypoint.sh evo.sh /exec/
 USER python
 
 ENTRYPOINT ["/exec/entrypoint.sh"]
-
