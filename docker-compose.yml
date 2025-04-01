@@ -34,9 +34,22 @@ services:
     ports:
       - '0:3306'
     volumes:
-      - 'mysql:/bitnami/mysql/data'
-      - 'mysql-init:/docker-entrypoint-initdb.d'
-      - 'mysql-start:/docker-entrypoint-startdb.d'
+      - type: volume
+        source: mysql
+        target: /bitnami/mysql/data
+        volume:
+          subpath: data
+      - type: volume
+        source: mysql
+        target: /docker-entrypoint-initdb.d
+        volume:
+          subpath: init
+      - type: volume
+        source: mysql
+        target: /docker-entrypoint-startdb.d
+        volume:
+          subpath: start
+
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
@@ -54,8 +67,6 @@ volumes:
     name: shared-volume
     external: true
   mysql:
-  mysql-init:
-  mysql-start:
 
 networks:
   graphdbnetwork:
