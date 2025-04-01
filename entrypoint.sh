@@ -42,4 +42,8 @@ fi
 
 count=$((count+1))
 sed -r -i "s/count=([[:graph:]]+)/count=$count/" /exec/evo.sh
-echo "Python entrypoint finished !"
+echo "GraphDB initialization finished !"
+
+echo "Launching Django ..."
+/config/python_env/bin/python /django/manage.py runserver 0.0.0.0:8000
+

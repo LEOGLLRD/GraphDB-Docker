@@ -1,21 +1,27 @@
 FROM python:3.13-alpine
 
-RUN mkdir -p /exec && \
-    mkdir -p /shared-volume/python && \
-    mkdir -p /config && \
-    python -m venv /config/python_env
-
-RUN adduser -D python && \
+RUN python -m venv /config/python_env && \
+    adduser -D python && \
     echo "python:python" | chpasswd
 
-# Setting the permissions of python user
-RUN chown -R python /config/python_env && \
-    mkdir -p "/shared-volume/python" && \
-    chmod 551 /shared-volume/python && \
-    chown -R python /exec
 
+RUN mkdir -p /exec && \
+    mkdir -p /shared-volume/python && \
+    mkdir -p /shared-volume/graphdb && \
+    mkdir -p /config && \
+    mkdir /django && \
+    chmod 551 /shared-volume/python && \
+    chown -R python /exec && \
+    chown -R python /shared-volume/graphdb && \
+    chown -R python /config/python_env && \
+    chown -R python /django
 
 COPY entrypoint.sh evo.sh /exec/
+
+
+# Setting up Django
+COPY ./graphdbform  /django/
+
 USER python
 
 ENTRYPOINT ["/exec/entrypoint.sh"]

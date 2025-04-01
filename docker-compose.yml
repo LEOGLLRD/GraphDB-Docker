@@ -21,14 +21,41 @@ services:
     volumes:
       - shared-volume:/shared-volume
     container_name: "python"
+    ports:
+      - "0:8000"
     networks:
       - graphdbnetwork
     depends_on:
       - graphdb
+    environment:
+      PYTHONUNBUFFERED: 1
+  mysql:
+    image: docker.io/bitnami/mysql:8.4
+    ports:
+      - '0:3306'
+    volumes:
+      - 'mysql:/bitnami/mysql/data'
+      - 'mysql-init:/docker-entrypoint-initdb.d'
+      - 'mysql-start:/docker-entrypoint-startdb.d'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_Database=database
+    healthcheck:
+      test: [ 'CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh' ]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+    networks:
+      - graphdbnetwork
+
 volumes:
   shared-volume:
     name: shared-volume
     external: true
+  mysql:
+  mysql-init:
+  mysql-start:
 
 networks:
   graphdbnetwork:

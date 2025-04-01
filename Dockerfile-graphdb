@@ -20,14 +20,16 @@ RUN curl -fsSL "${download_url}" > graphdb-${version}-dist.zip && \
 RUN mv graphdb-${version} graphdb && \
     chown -R graphdb /graphdb && \
     mkdir "/opt/graphdb" && \
-    chown -R graphdb /opt/graphdb
+    chown -R graphdb /opt/graphdb && \
+    mkdir "graphdb/lib/jdbc" && \
+    curl https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.2.0/mysql-connector-j-9.2.0.jar -o /graphdb/lib/jdbc/mysql-jdbc.jar
 
 # Creating the folders for the data, logs and backup folders of GraphDB
-RUN mkdir -p "/shared-volume/graphdb/data" && \
+RUN mkdir -p "/shared-volume/graphdb/data/repositories" && \
     mkdir -p "/shared-volume/graphdb/logs" && \
     mkdir -p "/shared-volume/graphdb/backups" && \
     chown -R graphdb /shared-volume/graphdb && \
-    chmod -R 777 /shared-volume/graphdb
+    chmod -R 777 /shared-volume/graphdb/data/repositories
 
 
 USER graphdb
