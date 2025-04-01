@@ -1,0 +1,16 @@
+Prefices{
+@prefix Person: http://www.semanticweb.org/hamza/ontologies/2017/6/Person.owl#
+}
+
+Axioms{
+<'Person:Ahmed'> <'Person:hasChild'> <'Person:Ali'>
+<'Person:Ali'> <'Person:hasChild'> <'Person:Aslam'>
+}
+
+Rules{
+Id: custom
+a <'Person:hasChild'> b
+b <'Person:hasChild'> c
+------------------------------------
+a <'Person:hasGrandChild'> c
+}
