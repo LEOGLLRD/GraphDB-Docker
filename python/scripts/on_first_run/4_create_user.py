@@ -7,6 +7,22 @@ config = configparser.ConfigParser()
 config.read('/shared-volume/python/config.ini')
 admin_username = "admin"
 admin_password = str(config.get("USERS", "admin_password"))
+
+
+def user_exists(graphdb_url, user_name, auth):
+    url = f"{graphdb_url}/rest/security/users"
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.get(url, auth=auth, headers=headers)
+    if response.status_code == 200:
+        users = response.json()
+        for user in users:
+            if user.get("username") == user_name:
+                return True
+    return False
+
+
 # Checking if the admin password is set
 if admin_password == "":
     print("Admin password is required !")
@@ -35,6 +51,12 @@ if config.getboolean("USERS", "create_users_with_pattern"):
     for i in range(1, number_of_users + 1):
         new_user = new_users_pattern.replace("#", str(i).zfill(2))
         new_password = new_users_pattern.replace("#", str(i).zfill(2))
+
+        # Checking if the user already exists
+        if user_exists("http://graphdb:7200", new_user,
+                       HTTPBasicAuth(admin_username, admin_password)):
+            print("User ", new_user, " already exists !")
+            continue
 
         url = 'http://graphdb:7200/rest/security/users/' + new_user
 
@@ -75,6 +97,12 @@ else:
         if creds == "": continue
         new_user = creds.split(",")[0]
         new_password = creds.split(",")[1]
+
+        # Checking if the user already exists
+        if user_exists("http://graphdb:7200", new_user,
+                       HTTPBasicAuth(admin_username, admin_password)):
+            print("User ", new_user, " already exists !")
+            continue
 
         url = 'http://graphdb:7200/rest/security/users/' + new_user
 

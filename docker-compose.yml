@@ -64,8 +64,6 @@ services:
 
 volumes:
   shared-volume:
-    name: shared-volume
-    external: true
   mysql:
 
 networks:

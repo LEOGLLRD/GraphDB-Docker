@@ -10,7 +10,6 @@ import sys
 def repository_exists(graphdb_url, rep_name, auth):
     url = f"{graphdb_url}/rest/repositories"
     response = requests.get(url, auth=auth)
-    print(f"response.status_code : {response.status_code}")
     if response.status_code == 200:
         repositories = response.json()
         for repo in repositories:

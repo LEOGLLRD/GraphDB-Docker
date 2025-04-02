@@ -6,6 +6,18 @@ import io
 config = configparser.ConfigParser()
 config.read('/shared-volume/python/config.ini')
 
+
+def repository_exists(graphdb_url, rep_name, auth):
+    url = f"{graphdb_url}/rest/repositories"
+    response = requests.get(url, auth=auth)
+    if response.status_code == 200:
+        repositories = response.json()
+        for repo in repositories:
+            if repo.get("id") == rep_name:
+                return True
+    return False
+
+
 url = "http://graphdb:7200/rest/repositories"
 admin = "admin"
 admin_password = config.get("USERS", "admin_password")
@@ -36,6 +48,12 @@ if config.getboolean("USERS", "create_users_with_pattern"):
     print("Creating the repositories ...")
     for i in range(1, number_of_users + 1):
         username_pattern = new_users_pattern.replace("#", str(i).zfill(2))
+        # Checking if the repo already exists
+        if repository_exists("http://graphdb:7200", username_pattern,
+                             HTTPBasicAuth(admin, admin_password)):
+            print("Repository ", username_pattern, " already exists !")
+            continue
+
         ttl_data = f"""
             @prefix config: <tag:rdf4j.org,2023:config/> .
                     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -127,6 +145,10 @@ else:
     for creds in credentials:
         if creds == "": continue
         username = creds.split(",")[0]
+        # Checking if the repo already exists
+        if repository_exists("http://graphdb:7200", username, HTTPBasicAuth(admin, admin_password)):
+            print("Repository ", username, " already exists !")
+            continue
         ttl_data = f"""
                     @prefix config: <tag:rdf4j.org,2023:config/> .
                     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
