@@ -8,7 +8,7 @@ ARG download_url_checksum="${download_url}.md5"
 RUN apt-get update && \
     apt-get install -u unzip
 
-RUN adduser graphdb
+RUN adduser -u 1001 graphdb --ingroup users
 
 # Downloading GraphDB
 RUN curl -fsSL "${download_url}" > graphdb-${version}-dist.zip && \
@@ -25,18 +25,21 @@ RUN mv graphdb-${version} graphdb && \
     curl https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.2.0/mysql-connector-j-9.2.0.jar -o /graphdb/lib/jdbc/mysql-jdbc.jar
 
 # Creating the folders for the data, logs and backup folders of GraphDB
-RUN mkdir -p "/shared-volume/graphdb/data/repositories" && \
-    mkdir -p "/shared-volume/graphdb/logs" && \
-    mkdir -p "/shared-volume/graphdb/backups" && \
-    chown -R graphdb /shared-volume/graphdb && \
-    chmod -R 777 /shared-volume/graphdb/data/repositories
+RUN mkdir -p "/shared-volume-graphdb/data" && \
+    mkdir -p "/shared-volume-graphdb/logs" && \
+    mkdir -p "/shared-volume-graphdb/backups" && \
+    mkdir -p "/shared-volume-python" && \
+    chown -R graphdb:users /shared-volume-graphdb && \
+    chown -R graphdb:users /shared-volume-graphdb/logs && \
+    chown -R graphdb:users /shared-volume-graphdb/data && \
+    chown -R graphdb:users /shared-volume-python
 
 
-USER graphdb
+USER 1001
 
 ENTRYPOINT ["/graphdb/bin/graphdb"]
 
-CMD ["-Dgraphdb.home=/opt/graphdb/home", "-Dgraphdb.distribution=docker", "-Dgraphdb.home.data=/shared-volume/graphdb/data", "-Dgraphdb.home.logs=/shared-volume/graphdb/logs"]
+CMD ["-Dgraphdb.home=/opt/graphdb/home", "-Dgraphdb.distribution=docker", "-Dgraphdb.home.data=/shared-volume-graphdb/data", "-Dgraphdb.home.logs=/shared-volume-graphdb/logs"]
 
 EXPOSE 7200
 EXPOSE 7300

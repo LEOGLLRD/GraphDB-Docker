@@ -14,7 +14,7 @@ from pathlib import Path
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/config.ini')
+config.read('/shared-volume-python/config.ini')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

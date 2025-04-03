@@ -5,9 +5,9 @@ import configparser
 from requests.auth import HTTPBasicAuth
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/config.ini')
+config.read('/shared-volume-python/config.ini')
 
-url = "http://graphdb:7200//rest/security/users/admin"
+url = "http://graphdb:7200/rest/security/users/admin"
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "root"
 

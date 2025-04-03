@@ -1,14 +1,13 @@
 #!/bin/bash
 
 # 1 : [user_in_container]
-# 2 : [graphdb_version]
+# 2 : [versions] graphdb_python
 # 3 : [container_name]
 # 4 : [create_users_with_pattern]
 # 5 : [number_of_users]
 # 6 : [new_users_pattern]
 # 7 : [users_credentials]
 # 8 : [admin_password]
-# 9 : [python_version]
 
 # Setting default values for optional arguments
 user_in_container="graphdb" # u
@@ -104,9 +103,9 @@ touch ./generated/Dockerfile-python
 echo "" > ./generated/Dockerfile-python
 
 echo "FROM python:$python_version-alpine" >> ./generated/Dockerfile-python
-echo "RUN mkdir -p /exec && mkdir -p /shared-volume/python && mkdir -p /config && python -m venv /config/python_env" >> ./generated/Dockerfile-python
+echo "RUN mkdir -p /exec && mkdir -p /shared-volume/graphdb-project/python && mkdir -p /config && python -m venv /config/python_env" >> ./generated/Dockerfile-python
 echo "RUN adduser -D python && echo \"python:python\" | chpasswd" >> ./generated/Dockerfile-python
-echo "RUN chown -R python /config/python_env && mkdir -p \"/shared-volume/python\" && chmod 551 /shared-volume/python && chown -R python /exec" >> ./generated/Dockerfile-python
+echo "RUN chown -R python /config/python_env && mkdir -p \"/shared-volume/graphdb-project/python\" && chmod 551 /shared-volume/graphdb-project/python && chown -R python /exec" >> ./generated/Dockerfile-python
 echo "COPY entrypoint.sh evo.sh /exec/" >> ./generated/Dockerfile-python
 echo "USER python" >> ./generated/Dockerfile-python
 echo "ENTRYPOINT [\"/exec/entrypoint.sh\"]" >> ./generated/Dockerfile-python

@@ -1,10 +1,10 @@
 import datetime
-
 import requests
 from requests.auth import HTTPBasicAuth
 import configparser
 import io
 import sys
+import json
 
 
 def repository_exists(graphdb_url, rep_name, auth):
@@ -40,6 +40,55 @@ def delete_repo(graphdb_url, rep_name, auth):
     return False
 
 
+def getUserRights(graphdb_url, user_name, auth):
+    url = f"{graphdb_url}/rest/security/users"
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    response = requests.get(url, auth=auth, headers=headers)
+    if response.status_code == 200:
+        users = response.json()
+        for user in users:
+            if user.get("username") == user_name:
+                return user.get("grantedAuthorities")
+    return None
+
+
+def addRepoRightsToUser(graphdb_url, rep_name, auth, user):
+    url = f"{graphdb_url}/rest/security/users/{user}"
+
+    # First getting the user actual rights
+    grantedAuthorities = getUserRights(graphdb_url, user, auth)
+    if grantedAuthorities is None:
+        print(f"Can't get granted authorities for user {user} !")
+        return False
+
+    repo_read = "READ_REPO_" + rep_name
+    repo_write = "WRITE_REPO_" + rep_name
+    grantedAuthorities = list(set(grantedAuthorities))
+    grantedAuthorities.append(repo_read)
+    grantedAuthorities.append(repo_write)
+    user_data = {
+        "grantedAuthorities": grantedAuthorities,
+
+    }
+
+    response = requests.put(
+        url,
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+        auth=auth,
+        data=json.dumps(user_data)
+    )
+
+    if response.status_code == 200:
+        print(f"{user}'s access updated successfully !")
+        return True
+
+    else:
+        print(f"Error {response.status_code}: {response.text}")
+        return False
+
+
 username = sys.argv[1]
 repo_name = sys.argv[2]
 db_name = sys.argv[3]
@@ -48,7 +97,7 @@ properties_path = sys.argv[5]
 obda_path = sys.argv[6]
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/config.ini')
+config.read('/shared-volume-python/config.ini')
 
 url = "http://graphdb:7200"
 admin = "admin"
@@ -96,7 +145,13 @@ ttl_file.close()
 
 if response.status_code == 201:
     print(f"Repository created!")
-    exit(0)
+    print("Adding rights to the user ...")
+    if addRepoRightsToUser(url, repo_name, auth, username):
+        print("Rights added !")
+        exit(0)
+    else:
+        print("Error while adding rights!")
+        exit(1)
 
 else:
     print(f"Error while creating repository: {response.status_code}")

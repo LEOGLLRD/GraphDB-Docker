@@ -4,7 +4,7 @@ import json
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/config.ini')
+config.read('/shared-volume-python/config.ini')
 admin_username = "admin"
 admin_password = str(config.get("USERS", "admin_password"))
 

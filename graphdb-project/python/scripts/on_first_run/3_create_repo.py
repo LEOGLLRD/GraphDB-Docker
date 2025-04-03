@@ -4,7 +4,7 @@ import configparser
 import io
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/config.ini')
+config.read('/shared-volume-python/config.ini')
 
 
 def repository_exists(graphdb_url, rep_name, auth):

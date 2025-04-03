@@ -4,7 +4,7 @@ import json
 import configparser
 
 config = configparser.ConfigParser()
-config.read('/shared-volume/python/config.ini')
+config.read('/shared-volume-python/config.ini')
 url = 'http://graphdb:7200/rest/security'
 
 security_config = True

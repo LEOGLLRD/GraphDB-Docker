@@ -1,25 +1,55 @@
 services:
+  init:
+    build:
+      dockerfile: Dockerfile-init
+
+    volumes:
+      - shared-volume:/shared-volume
   graphdb:
     build:
       dockerfile: Dockerfile-graphdb
     ports:
       - "0:7200"
     volumes:
-      - shared-volume:/shared-volume
+      - type: volume
+        source: shared-volume
+        target: /shared-volume-graphdb
+        volume:
+          subpath: graphdb-project/graphdb
+      - type: volume
+        source: shared-volume
+        target: /shared-volume-python
+        volume:
+          subpath: graphdb-project/python
+
     container_name: "graphdb"
     networks:
       - graphdbnetwork
-    healthcheck:
-      test: [ "CMD-SHELL", "grep 'Started GraphDB' /shared-volume/graphdb/logs/main.logs" ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
   python:
     build:
       dockerfile: Dockerfile-python
     volumes:
-      - shared-volume:/shared-volume
+      - type: volume
+        source: shared-volume
+        target: /shared-volume-python
+        volume:
+          subpath: graphdb-project/python
+      - type: volume
+        source: shared-volume
+        target: /shared-volume-graphdb
+        volume:
+          subpath: graphdb-project/graphdb
+    healthcheck:
+      test: [ "CMD-SHELL", "grep Started GraphDB in workbench mode at port 7200" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
     container_name: "python"
     ports:
       - "0:8000"
@@ -35,20 +65,20 @@ services:
       - '0:3306'
     volumes:
       - type: volume
-        source: mysql
+        source: shared-volume
         target: /bitnami/mysql/data
         volume:
-          subpath: data
+          subpath: graphdb-project/mysql/data
       - type: volume
-        source: mysql
+        source: shared-volume
         target: /docker-entrypoint-initdb.d
         volume:
-          subpath: init
+          subpath: graphdb-project/mysql/init
       - type: volume
-        source: mysql
+        source: shared-volume
         target: /docker-entrypoint-startdb.d
         volume:
-          subpath: start
+          subpath: graphdb-project/mysql/start
 
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
@@ -61,9 +91,13 @@ services:
       retries: 6
     networks:
       - graphdbnetwork
-
+    depends_on:
+      init:
+        condition: service_completed_successfully
 volumes:
   shared-volume:
+    name: "shared-volume"
+    external: true
   mysql:
 
 networks:

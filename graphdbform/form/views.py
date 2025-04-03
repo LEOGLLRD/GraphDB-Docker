@@ -15,7 +15,7 @@ def ontoprepo_view(request):
             db_password = form.cleaned_data["db_password"]
             properties_file = request.FILES["properties_file"]
             obda_file = request.FILES["obda_file"]
-            repo_path = f"/shared-volume/graphdb/data/repositories/{repository_name}"
+            repo_path = f"/shared-volume-graphdb/data/repositories/{repository_name}"
             os.umask(0)
             os.makedirs(repo_path, mode=0o777, exist_ok=True)
             properties_path = repo_path + "/" + properties_file.name
@@ -70,7 +70,7 @@ def custom_ruleset_view(request):
             user_name = form.cleaned_data['user_name']
             repository_name = form.cleaned_data["repository_name"]
             custom_ruleset_file = request.FILES["custom_ruleset_file"]
-            repo_path = f"/shared-volume/graphdb/data/repositories/{repository_name}"
+            repo_path = f"/shared-volume-graphdb/data/repositories/{repository_name}"
             os.umask(0)
             os.makedirs(repo_path, mode=0o777, exist_ok=True)
             custom_ruleset_file_path = repo_path + "/" + custom_ruleset_file.name

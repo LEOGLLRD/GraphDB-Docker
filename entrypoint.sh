@@ -2,23 +2,23 @@
 
 # First installing the dependencies with the requirements.txt file
 echo "Installing the dependencies with the requirements file ..."
-config/python_env/bin/pip install -r /shared-volume/python/requirements/requirements.txt
+config/python_env/bin/pip install -r /shared-volume-python/requirements/requirements.txt
 # Getting the number of times the container as been launched
 source /exec/evo.sh
 
 # Check if one of the script's directories exists
-if [[ -d "/shared-volume/python/scripts/on_first_run"  ||  -d "/shared-volume/python/scripts/on_each_run" ]]; then
+if [[ -d "/shared-volume-python/scripts/on_first_run"  ||  -d "/shared-volume-python/scripts/on_each_run" ]]; then
   # Checking if it's the first run
   echo "Checking if it's the first run ..."
   if [ "$count" = 0 ]; then
     echo "It's the first run !"
       # Checking if there are files in the on_first_run directory
     echo "Checking if on_first_run directory contains scripts ..."
-    nb_files=$(find "/shared-volume/python/scripts/on_first_run" -maxdepth 1 -type f -name "*.py" | wc -l)
+    nb_files=$(find "/shared-volume-python/scripts/on_first_run" -maxdepth 1 -type f -name "*.py" | wc -l)
     echo "$nb_files" " files to execute !"
     # If there are scripts, we execute them
     if [ ! "$nb_files" = 0 ]; then
-      for filename in $(find "/shared-volume/python/scripts/on_first_run" -maxdepth 1 -type f -name "*.py" | sort -V); do
+      for filename in $(find "/shared-volume-python/scripts/on_first_run" -maxdepth 1 -type f -name "*.py" | sort -V); do
         echo "Executing : " "$filename"
         /config/python_env/bin/python "$filename"
       done
@@ -29,11 +29,11 @@ if [[ -d "/shared-volume/python/scripts/on_first_run"  ||  -d "/shared-volume/py
   # Now checking if there are scripts to execute on each launch
   # First checking if there are files in the on_each_run directory
   echo "Checking on_each_run directory"
-    nb_files=$(find "/shared-volume/python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | wc -l)
+    nb_files=$(find "/shared-volume-python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | wc -l)
   echo $nb_files " files to execute !"
   # If there are scripts, we execute them
   if [ ! "$nb_files" = 0 ]; then
-    for filename in $(find "/shared-volume/python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | sort -V); do
+    for filename in $(find "/shared-volume-python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | sort -V); do
       echo "Executing : " "$filename"
       /config/python_env/bin/python "$filename"
     done

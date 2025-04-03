@@ -1,0 +1,13 @@
+FROM alpine:latest
+
+RUN adduser -u 1001 graphdb --ingroup users -D && \
+    mkdir -p "shared-volume/graphdb-project/python" && \
+    mkdir -p "shared-volume/graphdb-project/graphdb" && \
+    mkdir -p "shared-volume/graphdb-project/mysql/data" && \
+    mkdir -p "shared-volume/graphdb-project/mysql/start" && \
+    mkdir -p "shared-volume/graphdb-project/mysql/init"
+
+COPY init-entrypoint.sh /
+
+
+CMD ["./init-entrypoint.sh"]
