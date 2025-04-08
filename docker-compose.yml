@@ -43,6 +43,11 @@ services:
         target: /shared-volume-graphdb
         volume:
           subpath: graphdb-project/graphdb
+      - type: volume
+        source: shared-volume
+        target: /shared-volume-mysql
+        volume:
+          subpath: graphdb-project/graphdb
     healthcheck:
       test: [ "CMD-SHELL", "grep Started GraphDB in workbench mode at port 7200" ]
       interval: 10s
@@ -60,7 +65,8 @@ services:
     environment:
       PYTHONUNBUFFERED: 1
   mysql:
-    image: docker.io/bitnami/mysql:8.4
+    build:
+      dockerfile: Dockerfile-mysql
     ports:
       - '0:3306'
     volumes:
@@ -79,11 +85,14 @@ services:
         target: /docker-entrypoint-startdb.d
         volume:
           subpath: graphdb-project/mysql/start
-
+      - type: volume
+        source: shared-volume
+        target: /shared-volume-python
+        volume:
+          subpath: graphdb-project/python
     environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_Database=database
+      - MYSQL_ROOT_PASSWORD=root
     healthcheck:
       test: [ 'CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh' ]
       interval: 15s

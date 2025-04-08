@@ -1,0 +1,12 @@
+FROM docker.io/bitnami/mysql:8.4
+USER root
+RUN apt-get update && apt-get install reptyr
+RUN mkdir "/exec" && chown -R 1001 /exec
+
+COPY ./mysql-entrypoint.sh /opt/bitnami/scripts/mysql
+COPY evo.sh /exec/
+
+USER 1001
+EXPOSE 3306
+ENTRYPOINT [ "/opt/bitnami/scripts/mysql/mysql-entrypoint.sh" ]
+CMD [ "/opt/bitnami/scripts/mysql/run.sh" ]
