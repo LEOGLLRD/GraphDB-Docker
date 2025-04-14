@@ -3,7 +3,6 @@ from django.shortcuts import render
 from .forms import OnTopRepoForm, CustomRulesetForm
 import os
 
-
 def ontoprepo_view(request):
     if request.method == "POST":
         form = OnTopRepoForm(request.POST, request.FILES)
@@ -11,18 +10,17 @@ def ontoprepo_view(request):
 
             user_name = form.cleaned_data['user_name']
             repository_name = form.cleaned_data["repository_name"]
-            db_name = form.cleaned_data["db_name"]
-            db_password = form.cleaned_data["db_password"]
-            properties_file = request.FILES["properties_file"]
+            # properties_file = request.FILES["properties_file"]
             obda_file = request.FILES["obda_file"]
             repo_path = f"/shared-volume-graphdb/data/repositories/{repository_name}"
             os.umask(0)
             os.makedirs(repo_path, mode=0o777, exist_ok=True)
-            properties_path = repo_path + "/" + properties_file.name
+            properties_path = repo_path + "/config.properties"
+            # Copying the properties file
             obda_path = repo_path + "/" + obda_file.name
-            with open(properties_path, "wb") as f:
-                for chunk in properties_file.chunks():
-                    f.write(chunk)
+            # with open(properties_path, "wb") as f:
+            # for chunk in properties_file.chunks():
+            # f.write(chunk)
             with open(obda_path, "wb") as f:
                 for chunk in obda_file.chunks():
                     f.write(chunk)
@@ -31,8 +29,6 @@ def ontoprepo_view(request):
                     ["/config/python_env/bin/python", "/django/graphdbapi/create_ontop_repo.py",
                      f"{user_name}",
                      f"{repository_name}",
-                     f"{db_name}",
-                     f"{db_password}",
                      f"{properties_path}",
                      f"{obda_path}"],
                     check=True

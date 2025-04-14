@@ -10,7 +10,7 @@ xsd:        http://www.w3.org/2001/XMLSchema#
 
 mappingId	EmployeeMapping
 target		:test/employee/{emp_id} a :Employee ; foaf:lastName {name}^^xsd:string .
-source		SELECT * FROM employee
+source		SELECT * FROM Employee
 
 ]]
 

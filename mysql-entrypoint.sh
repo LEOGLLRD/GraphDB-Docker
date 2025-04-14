@@ -40,22 +40,32 @@ exec "$@" &
 pid=$!
 
 sleep 10
+
+# Generating and setting the new password for the root user
 LENGTH=8
-
 echo "Generating new password for root user ..."
-PASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
+ROOTPASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
 
-echo "Generated root Password : $PASSWORD"
-query="ALTER USER 'root'@'%' IDENTIFIED BY '$PASSWORD';"
+echo "Generated root's password : $ROOTPASSWORD"
+query="ALTER USER 'root'@'%' IDENTIFIED BY '$ROOTPASSWORD';"
 mysql -u root -p'root' -e "$query"
+echo "Root's password changed !"
+
+# Generating and setting the new password for the graphdb user
+echo "Generating new password for graphdb user ..."
+PASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
+echo "Generated graphdb's password : $PASSWORD"
+query="ALTER USER 'graphdb'@'%' IDENTIFIED BY '$PASSWORD';"
+mysql -u root -p"$ROOTPASSWORD" -e "$query"
 kill $pid
 ini_file="/shared-volume-python/config.ini"
 section="MYSQL"
-key="root_password"
+key="graphdb_password"
 new_value="$PASSWORD"
 sed -i "/^\[$section\]/,/^\[/ s/^$key *= *.*/$key = $new_value/" "$ini_file"
-echo "Password changed !"
+echo "Root's password changed !"
 fi
+
 
 count=$((count+1))
 sed -r -i "s/count=([[:graph:]]+)/count=$count/" /exec/evo.sh

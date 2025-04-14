@@ -1,10 +1,6 @@
-import datetime
-import requests
 from requests.auth import HTTPBasicAuth
 import configparser
-import io
-import sys
-import json
+import io, os, sys, json, requests
 
 
 def repository_exists(graphdb_url, rep_name, auth):
@@ -91,13 +87,26 @@ def addRepoRightsToUser(graphdb_url, rep_name, auth, user):
 
 username = sys.argv[1]
 repo_name = sys.argv[2]
-db_name = sys.argv[3]
-db_password = sys.argv[4]
-properties_path = sys.argv[5]
-obda_path = sys.argv[6]
+# db_name = sys.argv[3]
+# db_password = sys.argv[4]
+properties_path = sys.argv[3]
+obda_path = sys.argv[4]
 
 config = configparser.ConfigParser()
 config.read('/shared-volume-python/config.ini')
+
+jdbc_password = config.get("MYSQL", "graphdb_password")
+jdbc_username = "graphdb"
+jdbc_url = f"jdbc\\:mysql://mysql\\:3306/{jdbc_username}"
+jdbc_driver = "com.mysql.cj.jdbc.Driver"
+
+if os.path.exists(properties_path):
+    os.remove(properties_path)
+with open(properties_path, 'w') as file:
+    file.write(f"jdbc.password={jdbc_password}\n")
+    file.write(f"jdbc.user={jdbc_username}\n")
+    file.write(f"jdbc.url={jdbc_url}\n")
+    file.write(f"jdbc.driver={jdbc_driver}\n")
 
 url = "http://graphdb:7200"
 admin = "admin"

@@ -1,6 +1,9 @@
-CREATE DATABASE company;
-USE company;
+CREATE DATABASE graphdb;
+USE graphdb;
 
+CREATE USER 'graphdb'@'%' IDENTIFIED BY 'graphdb';
+GRANT ALL PRIVILEGES ON graphdb.* TO 'graphdb'@'%';
+FLUSH PRIVILEGES;
 CREATE TABLE Department
 (
     dept_id INT PRIMARY KEY AUTO_INCREMENT,
