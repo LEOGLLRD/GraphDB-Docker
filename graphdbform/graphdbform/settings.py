@@ -22,8 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
+import secrets
+import string
+
+def generate_random_string(length):
+    return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(length))
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.get("DJANGO", "secret_key")
+SECRET_KEY = generate_random_string(10)
+config.set("DJANGO", "secret_key", SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
