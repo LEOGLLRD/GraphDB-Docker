@@ -1,18 +1,23 @@
-import requests
-import base64
 import configparser
-
+import secrets
+import string
+import requests
 from requests.auth import HTTPBasicAuth
 
 config = configparser.ConfigParser()
 config.read('/shared-volume-python/config.ini')
+
+
+def generate_random_string(length):
+    return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(length))
+
 
 url = "http://graphdb:7200/rest/security/users/admin"
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "root"
 
 CURRENT_USERNAME = "admin"
-NEW_PASSWORD = config.get("USERS", "admin_password")
+NEW_PASSWORD = generate_random_string(8)
 # Checking if the new_password has been set
 if NEW_PASSWORD == "":
     print("Admin password is required !")
@@ -30,6 +35,7 @@ data = {
 response = requests.put(url, auth=HTTPBasicAuth("admin", "root"), json=data, headers=headers)
 
 if response.status_code == 200:
+    config.set("USERS", "admin_password", NEW_PASSWORD)
     print("Credentials updated !")
     exit(0)
 else:
