@@ -13,8 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import configparser
 
+path = '/shared-volume-python/config.ini'
 config = configparser.ConfigParser()
-config.read('/shared-volume-python/config.ini')
+config.read(path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,13 +26,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import secrets
 import string
 
+
 def generate_random_string(length):
     return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(length))
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = generate_random_string(10)
-config.set("DJANGO", "secret_key", SECRET_KEY)
-
+config["DJANGO"]["secret_key"] = SECRET_KEY
+with open(path, "w") as outfile:
+    config.write(outfile)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

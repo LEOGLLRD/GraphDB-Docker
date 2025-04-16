@@ -4,8 +4,9 @@ import string
 import requests
 from requests.auth import HTTPBasicAuth
 
+path = '/shared-volume-python/config.ini'
 config = configparser.ConfigParser()
-config.read('/shared-volume-python/config.ini')
+config.read(path)
 
 
 def generate_random_string(length):
@@ -13,10 +14,6 @@ def generate_random_string(length):
 
 
 url = "http://graphdb:7200/rest/security/users/admin"
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "root"
-
-CURRENT_USERNAME = "admin"
 NEW_PASSWORD = generate_random_string(8)
 # Checking if the new_password has been set
 if NEW_PASSWORD == "":
@@ -35,7 +32,9 @@ data = {
 response = requests.put(url, auth=HTTPBasicAuth("admin", "root"), json=data, headers=headers)
 
 if response.status_code == 200:
-    config.set("USERS", "admin_password", NEW_PASSWORD)
+    config["USERS"]["admin_password"] = NEW_PASSWORD
+    with open(path, "w") as outfile:
+        config.write(outfile)
     print("Credentials updated !")
     exit(0)
 else:

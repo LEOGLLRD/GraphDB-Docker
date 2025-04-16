@@ -4,8 +4,9 @@ import configparser
 
 from requests.auth import HTTPBasicAuth
 
+path = '/shared-volume-python/config.ini'
 config = configparser.ConfigParser()
-config.read('/shared-volume-python/config.ini')
+config.read(path)
 
 GRAPHDB_URL = "http://graphdb:7200"
 admin = "admin"

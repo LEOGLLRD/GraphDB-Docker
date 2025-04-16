@@ -3,8 +3,9 @@ from requests.auth import HTTPBasicAuth
 import configparser
 import io
 
+path = '/shared-volume-python/config.ini'
 config = configparser.ConfigParser()
-config.read('/shared-volume-python/config.ini')
+config.read(path)
 
 
 def repository_exists(graphdb_url, rep_name, auth):

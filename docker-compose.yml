@@ -48,6 +48,8 @@ services:
         target: /shared-volume-mysql
         volume:
           subpath: graphdb-project/graphdb
+    env_file:
+      - vars.env
     healthcheck:
       test: [ "CMD-SHELL", "grep Started GraphDB in workbench mode at port 7200" ]
       interval: 10s

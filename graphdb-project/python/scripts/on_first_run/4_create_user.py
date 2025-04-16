@@ -3,8 +3,9 @@ from requests.auth import HTTPBasicAuth
 import json
 import configparser
 
+path = '/shared-volume-python/config.ini'
 config = configparser.ConfigParser()
-config.read('/shared-volume-python/config.ini')
+config.read(path)
 admin_username = "admin"
 admin_password = str(config.get("USERS", "admin_password"))
 

@@ -6,6 +6,18 @@ config/python_env/bin/pip install -r /shared-volume-python/requirements/requirem
 # Getting the number of times the container as been launched
 source /exec/evo.sh
 
+# Setting the valus of NUMBER_OF_USERS and NEW_USERS_PATTERN ENVIRONMENT VARIABLES in config.ini
+echo "Setting the config.ini file ..."
+echo "$NUMBER_OF_USERS"
+echo "$NEW_USERS_PATTERN"
+ini_file="/shared-volume-python/config.ini"
+section="USERS"
+key="number_of_users"
+new_value="$NUMBER_OF_USERS"
+sed -i "/^\[$section\]/,/^\[/ s/^$key *= *.*/$key = $new_value/" "$ini_file"
+key="new_users_pattern"
+new_value="$NEW_USERS_PATTERN"
+sed -i "/^\[$section\]/,/^\[/ s/^$key *= *.*/$key = $new_value/" "$ini_file"
 # Check if one of the script's directories exists
 if [[ -d "/shared-volume-python/scripts/on_first_run"  ||  -d "/shared-volume-python/scripts/on_each_run" ]]; then
   # Checking if it's the first run
