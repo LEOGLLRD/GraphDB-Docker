@@ -10,6 +10,6 @@ RUN adduser -u 1001 graphdb --ingroup users -D && \
     chown -R 1001 "shared-volume/graphdb-project"
 
 COPY init-entrypoint.sh /
-
+COPY init-healthcheck.sh /
 
 CMD ["./init-entrypoint.sh"]

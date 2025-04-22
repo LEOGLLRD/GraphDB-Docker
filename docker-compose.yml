@@ -2,9 +2,14 @@ services:
   init:
     build:
       dockerfile: Dockerfile-init
-
     volumes:
       - shared-volume:/shared-volume
+    networks:
+      - graphdbnetwork
+    healthcheck:
+      test: [ "CMD", "/init-healthcheck.sh" ]
+      retries: 3
+      interval: 2s
   graphdb:
     build:
       dockerfile: Dockerfile-graphdb
@@ -25,9 +30,14 @@ services:
     container_name: "graphdb"
     networks:
       - graphdbnetwork
+    healthcheck:
+      test: [ "CMD", "/graphdb-healthcheck.sh" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     depends_on:
       init:
-        condition: service_completed_successfully
+        condition: service_healthy
 
   python:
     build:
@@ -50,22 +60,20 @@ services:
           subpath: graphdb-project/graphdb
     env_file:
       - vars.env
-    healthcheck:
-      test: [ "CMD-SHELL", "grep Started GraphDB in workbench mode at port 7200" ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
-
     container_name: "python"
     ports:
       - "0:8000"
     networks:
       - graphdbnetwork
     depends_on:
-      - graphdb
+      # mysql:
+      #  condition: service_healthy
+      graphdb:
+        condition: service_healthy
     environment:
       PYTHONUNBUFFERED: 1
+
+
   mysql:
     build:
       dockerfile: Dockerfile-mysql
@@ -95,16 +103,17 @@ services:
     environment:
       - MYSQL_Database=database
       - MYSQL_ROOT_PASSWORD=root
+      - BITNAMI_DEBUG=true
     healthcheck:
       test: [ 'CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh' ]
       interval: 15s
-      timeout: 5s
-      retries: 6
+      retries: 10
+    stop_grace_period: 30s
     networks:
       - graphdbnetwork
     depends_on:
       init:
-        condition: service_completed_successfully
+        condition: service_healthy
 volumes:
   shared-volume:
     name: "shared-volume"

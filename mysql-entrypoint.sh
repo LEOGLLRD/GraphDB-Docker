@@ -5,8 +5,6 @@
 # Getting the number of times the container as been launched
 source /exec/evo.sh
 
-# shellcheck disable=SC1091
-
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -43,27 +41,24 @@ sleep 10
 
 # Generating and setting the new password for the root user
 LENGTH=8
-echo "Generating new password for root user ..."
 ROOTPASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
-
-echo "Generated root's password : $ROOTPASSWORD"
+ini_file="/shared-volume-python/config.ini"
 query="ALTER USER 'root'@'%' IDENTIFIED BY '$ROOTPASSWORD';"
 mysql -u root -p'root' -e "$query"
-echo "Root's password changed !"
+section="MYSQL"
+key="root_password"
+new_value="$ROOTPASSWORD"
+sed -i "/^\[$section\]/,/^\[/ s/^$key *= *.*/$key = $new_value/" "$ini_file"
 
 # Generating and setting the new password for the graphdb user
-echo "Generating new password for graphdb user ..."
 PASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
-echo "Generated graphdb's password : $PASSWORD"
 query="ALTER USER 'graphdb'@'%' IDENTIFIED BY '$PASSWORD';"
 mysql -u root -p"$ROOTPASSWORD" -e "$query"
 kill $pid
-ini_file="/shared-volume-python/config.ini"
 section="MYSQL"
 key="graphdb_password"
 new_value="$PASSWORD"
 sed -i "/^\[$section\]/,/^\[/ s/^$key *= *.*/$key = $new_value/" "$ini_file"
-echo "Root's password changed !"
 fi
 
 

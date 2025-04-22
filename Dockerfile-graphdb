@@ -28,12 +28,9 @@ RUN mv graphdb-${version} graphdb && \
 RUN mkdir -p "/shared-volume-graphdb/data" && \
     mkdir -p "/shared-volume-graphdb/logs" && \
     mkdir -p "/shared-volume-graphdb/backups" && \
-    mkdir -p "/shared-volume-python" && \
-    chown -R graphdb:users /shared-volume-graphdb && \
-    chown -R graphdb:users /shared-volume-graphdb/logs && \
-    chown -R graphdb:users /shared-volume-graphdb/data && \
-    chown -R graphdb:users /shared-volume-python
+    mkdir -p "/shared-volume-python"
 
+COPY graphdb-healthcheck.sh /
 
 USER 1001
 

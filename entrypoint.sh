@@ -8,8 +8,6 @@ source /exec/evo.sh
 
 # Setting the valus of NUMBER_OF_USERS and NEW_USERS_PATTERN ENVIRONMENT VARIABLES in config.ini
 echo "Setting the config.ini file ..."
-echo "$NUMBER_OF_USERS"
-echo "$NEW_USERS_PATTERN"
 ini_file="/shared-volume-python/config.ini"
 section="USERS"
 key="number_of_users"

@@ -36,10 +36,11 @@ SECRET_KEY = generate_random_string(10)
 config["DJANGO"]["secret_key"] = SECRET_KEY
 with open(path, "w") as outfile:
     config.write(outfile)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['python', 'localhost', '127.0.0.1']
 
 # Application definition
 
