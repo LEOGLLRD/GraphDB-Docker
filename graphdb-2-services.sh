@@ -39,6 +39,10 @@ project="GraphDB-Docker"
 curl -L -o ./LEOGLLRD-graphdb/graphdb.zip https://github.com/LEOGLLRD/GraphDB-Docker/archive/refs/heads/several-services-dockercompose.zip
 unzip ./LEOGLLRD-graphdb/graphdb.zip -d ./LEOGLLRD-graphdb
 rm ./LEOGLLRD-graphdb/graphdb.zip
+mkdir -p ./LEOGLLRD-graphdb/$project-$branch/graphdb-project/graphdb/backups
+mkdir -p ./LEOGLLRD-graphdb/$project-$branch/graphdb-project/graphdb/data/repositories
+mkdir -p ./LEOGLLRD-graphdb/$project-$branch/graphdb-project/graphdb/data/logs
+mkdir -p ./LEOGLLRD-graphdb/$project-$branch/graphdb-project/mysql/start
 echo "Everything required is downloaded."
 
 # Modifying the env vars
