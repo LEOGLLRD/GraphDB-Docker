@@ -4,6 +4,8 @@ RUN adduser -u 1001 graphdb --ingroup users -D && \
     mkdir -p "shared-volume/graphdb-project/python" && \
     mkdir -p "shared-volume/graphdb-project" && \
     mkdir -p "shared-volume/graphdb-project/graphdb" && \
+    mkdir -p "shared-volume/graphdb-project/graphdb/backups" && \
+    mkdir -p "shared-volume/graphdb-project/graphdb/data/repositories" && \
     mkdir -p "shared-volume/graphdb-project/mysql/start" && \
     mkdir -p "shared-volume/graphdb-project/mysql/init" && \
     chown -R 1001 "shared-volume/graphdb-project"
