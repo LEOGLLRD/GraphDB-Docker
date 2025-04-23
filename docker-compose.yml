@@ -82,11 +82,6 @@ services:
     volumes:
       - type: volume
         source: shared-volume
-        target: /bitnami/mysql/data
-        volume:
-          subpath: graphdb-project/mysql/data
-      - type: volume
-        source: shared-volume
         target: /docker-entrypoint-initdb.d
         volume:
           subpath: graphdb-project/mysql/init

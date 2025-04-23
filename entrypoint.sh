@@ -40,7 +40,7 @@ if [[ -d "/shared-volume-python/scripts/on_first_run"  ||  -d "/shared-volume-py
   # First checking if there are files in the on_each_run directory
   echo "Checking on_each_run directory"
     nb_files=$(find "/shared-volume-python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | wc -l)
-  echo $nb_files " files to execute !"
+  echo "$nb_files" " files to execute !"
   # If there are scripts, we execute them
   if [ ! "$nb_files" = 0 ]; then
     for filename in $(find "/shared-volume-python/scripts/on_each_run" -maxdepth 1 -type f -name "*.py" | sort -V); do

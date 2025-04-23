@@ -1,4 +1,17 @@
 #!/bin/sh
+# Getting the number of times the container as been launched
+source /evo.sh
+
+if [ "$count" = 0 ]; then
+  echo "First run !"
+  # Emptying the graphDB folders
+  rm -f /shared-volume/graphdb-project/graphdb/data/*.js
+  rm -r -f /shared-volume/graphdb-project/graphdb/data/repositories/*
+  rm -r -f /shared-volume/graphdb-project/graphdb/data/logs/*
+  rm -r -f /shared-volume/graphdb-project/graphdb/data/backups/*
+
+fi
+
 chown -R graphdb /shared-volume/graphdb-project/graphdb
 chown -R graphdb /shared-volume/graphdb-project/python
 chown -R graphdb /shared-volume/graphdb-project/mysql
@@ -22,10 +35,10 @@ do
     # echo "Status code : $STATUS_CODE"
     if [ "$STATUS_CODE" = "200" ]; then
     echo "---------------------------------"
-    echo "MySQL root user's password : $MYSQLRootPass"
-    echo "MySQL GraphDB user's password : $MYSQLGraphdbPass"
+    #echo "MySQL root user's password : $MYSQLRootPass"
+    #echo "MySQL GraphDB user's password : $MYSQLGraphdbPass"
     echo "GraphDB admin user's password : $GraphdbAdminPass"
-    echo "Django secret_key : $DjangoSecretKey"
+    #echo "Django secret_key : $DjangoSecretKey"
     echo "---------------------------------"
     condition=1
     else
@@ -33,3 +46,6 @@ do
     fi
 
 done
+
+count=$((count+1))
+sed -r -i "s/count=([[:graph:]]+)/count=$count/" /evo.sh
