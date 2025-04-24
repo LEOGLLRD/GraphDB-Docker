@@ -14,7 +14,6 @@ COPY evo.sh /
 COPY init-entrypoint.sh /
 COPY init-healthcheck.sh /
 
-RUN chmod +x /init-healthcheck.sh && \
-    chmod +x /init-entrypoint.sh
+RUN chmod +x /init-healthcheck.sh
 
 CMD ["./init-entrypoint.sh"]
