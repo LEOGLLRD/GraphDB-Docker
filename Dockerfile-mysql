@@ -6,6 +6,8 @@ RUN mkdir "/exec" && chown -R 1001 /exec
 COPY ./mysql-entrypoint.sh /opt/bitnami/scripts/mysql
 COPY evo.sh /exec/
 
+RUN chmod +x /opt/bitnami/scripts/mysql/mysql-entrypoint.sh
+
 USER 1001
 EXPOSE 3306
 ENTRYPOINT [ "/opt/bitnami/scripts/mysql/mysql-entrypoint.sh" ]

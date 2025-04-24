@@ -32,6 +32,8 @@ RUN mkdir -p "/shared-volume-graphdb/data" && \
 
 COPY graphdb-healthcheck.sh /
 
+RUN chmod +x /graphdb-healthcheck.sh
+
 USER 1001
 
 ENTRYPOINT ["/graphdb/bin/graphdb"]
