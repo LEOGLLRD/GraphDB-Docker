@@ -93,7 +93,7 @@ properties_path = sys.argv[3]
 obda_path = sys.argv[4]
 
 config = configparser.ConfigParser()
-config.read('/grapdb-project/python/config.ini')
+config.read('/graphdb-project/python/config.ini')
 
 jdbc_password = config.get("MYSQL", "graphdb_password")
 jdbc_username = "graphdb"

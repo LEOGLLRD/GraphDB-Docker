@@ -95,7 +95,7 @@ repo_name = sys.argv[2]
 custom_ruleset_file_path = sys.argv[3]
 
 config = configparser.ConfigParser()
-config.read('/grapdb-project/python/config.ini')
+config.read('/graphdb-project/python/config.ini')
 
 url = "http://graphdb:7200"
 admin = "admin"
