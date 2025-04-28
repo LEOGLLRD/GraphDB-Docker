@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 import configparser
 import io
 
-path = '/shared-volume-python/config.ini'
+path = '/graphdb-project/python/config.ini'
 config = configparser.ConfigParser()
 config.read(path)
 

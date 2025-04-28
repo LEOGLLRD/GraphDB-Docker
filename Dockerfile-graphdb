@@ -25,20 +25,19 @@ RUN mv graphdb-${version} graphdb && \
     curl https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/9.2.0/mysql-connector-j-9.2.0.jar -o /graphdb/lib/jdbc/mysql-jdbc.jar
 
 # Creating the folders for the data, logs and backup folders of GraphDB
-RUN mkdir -p "/shared-volume-graphdb/data" && \
-    mkdir -p "/shared-volume-graphdb/logs" && \
-    mkdir -p "/shared-volume-graphdb/backups" && \
-    mkdir -p "/shared-volume-python"
+RUN mkdir -p "/graphdb-project/graphdb/data" && \
+    mkdir -p "/graphdb-project/graphdb/logs" && \
+    mkdir -p "/graphdb-project/graphdb/backups" && \
+    mkdir -p "/graphdb-project/python"
 
-COPY graphdb-healthcheck.sh /
+COPY graphdb-entrypoint.sh /
 
-RUN chmod +x /graphdb-healthcheck.sh
+RUN chmod +x /graphdb-entrypoint.sh
 
 USER 1001
 
-ENTRYPOINT ["/graphdb/bin/graphdb"]
-
-CMD ["-Dgraphdb.home=/opt/graphdb/home", "-Dgraphdb.distribution=docker", "-Dgraphdb.home.data=/shared-volume-graphdb/data", "-Dgraphdb.home.logs=/shared-volume-graphdb/logs"]
+ENTRYPOINT ["/graphdb-entrypoint.sh"]
+CMD ["-Dgraphdb.home=/opt/graphdb/home", "-Dgraphdb.distribution=docker", "-Dgraphdb.home.data=/graphdb-project/graphdb/data", "-Dgraphdb.home.logs=/graphdb-project/graphdb/logs"]
 
 EXPOSE 7200
 EXPOSE 7300

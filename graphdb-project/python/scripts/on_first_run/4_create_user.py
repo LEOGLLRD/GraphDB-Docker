@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 import json
 import configparser
 
-path = '/shared-volume-python/config.ini'
+path = '/graphdb-project/python/config.ini'
 config = configparser.ConfigParser()
 config.read(path)
 admin_username = "admin"

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import configparser
 
-path = '/shared-volume-python/config.ini'
+path = '/graphdb-project/python/config.ini'
 config = configparser.ConfigParser()
 config.read(path)
 

@@ -2,6 +2,15 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
+init_done=false
+while [ $init_done = false ]; do
+    source /graphdb-project/done.sh
+    init=$((init))
+    if [ $init = 1 ]; then
+      init_done=true
+    fi
+done
+
 # Getting the number of times the container as been launched
 source /exec/evo.sh
 
@@ -39,10 +48,11 @@ pid=$!
 
 sleep 10
 
+echo "TTTTTTTTTTTTTEEEEEEEEEEEESSSSSSSSSSTTTTTTTTt"
 # Generating and setting the new password for the root user
 LENGTH=8
 ROOTPASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
-ini_file="/shared-volume-python/config.ini"
+ini_file="/graphdb-project/python/config.ini"
 query="ALTER USER 'root'@'%' IDENTIFIED BY '$ROOTPASSWORD';"
 mysql -u root -p'root' -e "$query"
 section="MYSQL"
@@ -64,4 +74,6 @@ fi
 
 count=$((count+1))
 sed -r -i "s/count=([[:graph:]]+)/count=$count/" /exec/evo.sh
+sed -r -i "s/mysql=([[:graph:]]+)/mysql=1/" /graphdb-project/done.sh
+
 exec "$@"

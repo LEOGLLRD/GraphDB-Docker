@@ -7,10 +7,8 @@ services:
       - shared-volume:/shared-volume
     networks:
       - graphdbnetwork
-    healthcheck:
-      test: [ "CMD", "/init-healthcheck.sh" ]
-      retries: 3
-      interval: 2s
+
+
   graphdb:
     build:
       dockerfile: Dockerfile-graphdb
@@ -19,26 +17,15 @@ services:
     volumes:
       - type: volume
         source: shared-volume
-        target: /shared-volume-graphdb
+        target: /graphdb-project
         volume:
-          subpath: graphdb-project/graphdb
-      - type: volume
-        source: shared-volume
-        target: /shared-volume-python
-        volume:
-          subpath: graphdb-project/python
+          subpath: graphdb-project
 
     container_name: "graphdb"
     networks:
       - graphdbnetwork
-    healthcheck:
-      test: [ "CMD", "/graphdb-healthcheck.sh" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
-      init:
-        condition: service_healthy
+      - init
 
   python:
     build:
@@ -46,19 +33,9 @@ services:
     volumes:
       - type: volume
         source: shared-volume
-        target: /shared-volume-python
+        target: /graphdb-project
         volume:
-          subpath: graphdb-project/python
-      - type: volume
-        source: shared-volume
-        target: /shared-volume-graphdb
-        volume:
-          subpath: graphdb-project/graphdb
-      - type: volume
-        source: shared-volume
-        target: /shared-volume-mysql
-        volume:
-          subpath: graphdb-project/graphdb
+          subpath: graphdb-project
     env_file:
       - vars.env
     container_name: "python"
@@ -66,13 +43,10 @@ services:
       - "0:8000"
     networks:
       - graphdbnetwork
-    depends_on:
-      # mysql:
-      #  condition: service_healthy
-      graphdb:
-        condition: service_healthy
     environment:
       PYTHONUNBUFFERED: 1
+    depends_on:
+      - init
 
 
   mysql:
@@ -93,23 +67,20 @@ services:
           subpath: graphdb-project/mysql/start
       - type: volume
         source: shared-volume
-        target: /shared-volume-python
+        target: /graphdb-project
         volume:
-          subpath: graphdb-project/python
+          subpath: graphdb-project
     environment:
       - MYSQL_Database=database
       - MYSQL_ROOT_PASSWORD=root
       - BITNAMI_DEBUG=true
-    healthcheck:
-      test: [ 'CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh' ]
-      interval: 15s
-      retries: 10
     stop_grace_period: 30s
     networks:
       - graphdbnetwork
     depends_on:
-      init:
-        condition: service_healthy
+      - init
+
+
 volumes:
   shared-volume:
     name: "shared-volume"

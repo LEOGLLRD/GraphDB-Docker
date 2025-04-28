@@ -2,6 +2,10 @@
 # Getting the number of times the container as been launched
 source /evo.sh
 
+source /shared-volume/graphdb-project/done.sh
+sed -r -i "s/init=([[:graph:]]+)/init=0/" /shared-volume/graphdb-project/done.sh
+sed -r -i "s/mysql=([[:graph:]]+)/mysql=0/" /shared-volume/graphdb-project/done.sh
+
 if [ "$count" = 0 ]; then
   echo "First run !"
   # Emptying the graphDB folders
@@ -10,14 +14,22 @@ if [ "$count" = 0 ]; then
   rm -r -f /shared-volume/graphdb-project/graphdb/data/logs/*
   rm -r -f /shared-volume/graphdb-project/graphdb/data/backups/*
 
+  chown -R graphdb /shared-volume/graphdb-project
+#chown -R graphdb /shared-volume/graphdb-project/graphdb
+#chown -R graphdb /shared-volume/graphdb-project/python
+#chown -R graphdb /shared-volume/graphdb-project/mysql
+
 fi
 
-chown -R graphdb /shared-volume/graphdb-project/graphdb
-chown -R graphdb /shared-volume/graphdb-project/python
-chown -R graphdb /shared-volume/graphdb-project/mysql
+
+
 echo "Initialisation finished !"
+# Setting up a witness file
+
 URL="http://python:8000/healthz/"
 SLEEP_DELAY=10
+sed -r -i "s/init=([[:graph:]]+)/init=1/" /shared-volume/graphdb-project/done.sh
+
 # Checking if the config.ini is set and Django is started
 condition=0
 while [ $condition = 0 ];

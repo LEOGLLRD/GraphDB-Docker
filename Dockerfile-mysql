@@ -1,12 +1,14 @@
 FROM docker.io/bitnami/mysql:8.4
 USER root
-RUN apt-get update && apt-get install reptyr
 RUN mkdir "/exec" && chown -R 1001 /exec
 
 COPY ./mysql-entrypoint.sh /opt/bitnami/scripts/mysql
 COPY evo.sh /exec/
 
-RUN chmod +x /opt/bitnami/scripts/mysql/mysql-entrypoint.sh
+RUN chmod +x /opt/bitnami/scripts/mysql/mysql-entrypoint.sh && \
+    mkdir -p /graphdb-project && \
+    touch /graphdb-project/done.sh &&  \
+    chown -R 1001 /graphdb-project
 
 USER 1001
 EXPOSE 3306
