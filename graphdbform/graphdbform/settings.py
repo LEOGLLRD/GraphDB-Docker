@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 import configparser
+
+from django.conf.global_settings import ALLOWED_HOSTS
 
 path = '/graphdb-project/python/config.ini'
 config = configparser.ConfigParser()
@@ -38,9 +40,12 @@ with open(path, "w") as outfile:
     config.write(outfile)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = ['python', 'localhost', '127.0.0.1']
+DEBUG = True
+ALLOWED_H = os.getenv("ALLOWED_HOSTS")
+if ALLOWED_H is not None:
+    ALLOWED_HOSTS.extend(ALLOWED_H.split(","))
+    # print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
 # Application definition
 
