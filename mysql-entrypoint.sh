@@ -48,7 +48,6 @@ pid=$!
 
 sleep 10
 
-echo "TTTTTTTTTTTTTEEEEEEEEEEEESSSSSSSSSSTTTTTTTTt"
 # Generating and setting the new password for the root user
 LENGTH=8
 ROOTPASSWORD=$(date +%s%N | sha256sum | base64 | tr -dc 'A-Za-z0-9' | head -c $LENGTH)
