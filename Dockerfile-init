@@ -17,4 +17,4 @@ COPY init-healthcheck.sh /
 RUN chmod +x /init-healthcheck.sh && \
     chmod +x /init-entrypoint.sh
 
-CMD ["./init-entrypoint.sh"]
+ENTRYPOINT ["/init-entrypoint.sh"]

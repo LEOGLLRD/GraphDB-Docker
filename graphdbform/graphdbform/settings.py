@@ -40,7 +40,7 @@ with open(path, "w") as outfile:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['python', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 

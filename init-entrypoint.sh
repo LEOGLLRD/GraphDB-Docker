@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/ash
 # Getting the number of times the container as been launched
 source /evo.sh
 

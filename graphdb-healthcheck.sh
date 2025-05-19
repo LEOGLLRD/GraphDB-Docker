@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 URL="http://localhost:7200/rest/repositories/"
 STATUS_CODE=$(wget --server-response --spider "$URL" 2>&1 \
     | awk '/HTTP\// {print $2}' | head -n1)

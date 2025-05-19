@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/ash
 USER=$(stat -c '%U' "/shared-volume/graphdb-project/graphdb")
 if [ "$USER" != "graphdb" ]; then
     exit 1
